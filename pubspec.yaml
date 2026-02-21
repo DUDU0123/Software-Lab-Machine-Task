@@ -61,8 +61,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/fonts/
+    - assets/images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -88,5 +89,15 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
+  fonts:
+    - family: BeVietnamPro-Bold
+      fonts:
+        - asset: assets/fonts/BeVietnamPro-Bold.ttf
+    - family: BeVietnamPro-Medium
+      fonts:
+        - asset: assets/fonts/BeVietnamPro-Medium.ttf
+    - family: BeVietnamPro-Regular
+      fonts:
+        - asset: assets/fonts/BeVietnamPro-Regular.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
