@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:machine_task_app/view/screens/onboarding/onboarding_page.dart';
 
 class RootWidgetPage extends StatelessWidget {
   const RootWidgetPage({super.key});
@@ -15,11 +16,7 @@ class RootWidgetPage extends StatelessWidget {
           theme: ThemeData(
             useMaterial3: true,
           ),
-          home: Scaffold(
-            body: Center(
-              child: Text('Welcome to Machine Task App!'),
-            ),
-          ),
+          home: OnboardingPage()
         );
       },
     );
