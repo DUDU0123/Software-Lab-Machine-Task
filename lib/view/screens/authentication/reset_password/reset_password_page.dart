@@ -4,8 +4,23 @@ import 'package:machine_task_app/view/widgets/authentication/auth_page_small_wid
 import 'package:machine_task_app/view/widgets/authentication/auth_text_field_widget.dart';
 import 'package:machine_task_app/view/widgets/authentication/farmer_eats_text_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-class ForgotPasswordPage extends StatelessWidget {
-  const ForgotPasswordPage({super.key});
+class ResetPasswordPage extends StatefulWidget {
+  const ResetPasswordPage({super.key});
+
+  @override
+  State<ResetPasswordPage> createState() => _ResetPasswordPageState();
+}
+
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController confirmNewPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    newPasswordController.dispose();
+    confirmNewPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +38,7 @@ class ForgotPasswordPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  AuthPageTitleWidget(text: "Forgot Password?",),
+                  AuthPageTitleWidget(text: "Reset Password",),
                   AppConstraints.kHeight24,
                   AuthPageSubTitleWidget(
                     firstText: "Remember your pasword?",
@@ -34,12 +49,19 @@ class ForgotPasswordPage extends StatelessWidget {
                   ),
                 AppConstraints.kHeight72,
                 AuthTextFieldWidget(
-                  hintText: "Phone Number",
-                  prefixIcon: SvgPicture.asset(AppAssets.phoneIcon,height: 15.h, width: 15.w,),
+                  controller: newPasswordController,
+                  hintText: "Password",
+                  prefixIcon: SvgPicture.asset(AppAssets.passwordLockIcon,height: 15.h, width: 15.w,),
+                ),
+                AppConstraints.kHeight24,
+                AuthTextFieldWidget(
+                  controller: confirmNewPasswordController,
+                  hintText: "Confirm New Password",
+                  prefixIcon: SvgPicture.asset(AppAssets.passwordLockIcon,height: 15.h, width: 15.w,),
                 ),
                 AppConstraints.kHeight32,
                 AuthPageLongButtonWidget(
-                  buttonText: "Send Code",
+                  buttonText: "Submit",
                   onPressed: () {
                     
                   },

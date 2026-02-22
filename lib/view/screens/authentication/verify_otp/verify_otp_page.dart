@@ -4,8 +4,8 @@ import 'package:machine_task_app/view/widgets/authentication/auth_page_small_wid
 import 'package:machine_task_app/view/widgets/authentication/auth_text_field_widget.dart';
 import 'package:machine_task_app/view/widgets/authentication/farmer_eats_text_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-class ForgotPasswordPage extends StatelessWidget {
-  const ForgotPasswordPage({super.key});
+class VerifyOtpPage extends StatelessWidget {
+  const VerifyOtpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class ForgotPasswordPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  AuthPageTitleWidget(text: "Forgot Password?",),
+                  AuthPageTitleWidget(text: "Verify OTP",),
                   AppConstraints.kHeight24,
                   AuthPageSubTitleWidget(
                     firstText: "Remember your pasword?",
@@ -34,15 +34,32 @@ class ForgotPasswordPage extends StatelessWidget {
                   ),
                 AppConstraints.kHeight72,
                 AuthTextFieldWidget(
-                  hintText: "Phone Number",
-                  prefixIcon: SvgPicture.asset(AppAssets.phoneIcon,height: 15.h, width: 15.w,),
+                  hintText: "Password",
+                  prefixIcon: SvgPicture.asset(AppAssets.passwordLockIcon,height: 15.h, width: 15.w,),
+                ),
+                AppConstraints.kHeight24,
+                AuthTextFieldWidget(
+                  hintText: "Confirm New Password",
+                  prefixIcon: SvgPicture.asset(AppAssets.passwordLockIcon,height: 15.h, width: 15.w,),
                 ),
                 AppConstraints.kHeight32,
                 AuthPageLongButtonWidget(
-                  buttonText: "Send Code",
+                  buttonText: "Submit",
                   onPressed: () {
                     
                   },
+                ),
+                Center(
+                  child: TextButton(onPressed: () {
+                    // resend code
+                  }, child: Text(
+                    "Resend Code",
+                    style: AppCommonMethods.commonTextStyle(
+                      fontFamily: AppAssets.beVietnameProMedium,
+                      fontSize: 14.sp,
+                      decoration: TextDecoration.underline,
+                    ),
+                  )),
                 ),
                 ],
               ),

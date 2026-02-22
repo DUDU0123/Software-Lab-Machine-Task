@@ -4,8 +4,43 @@ import 'package:machine_task_app/model/repositories/authentication/authenticatio
 
 class AuthenticationController extends GetxController{
   final AuthenticationRepo authenticationRepo;
+  String? selectedState;
 
   AuthenticationController({required this.authenticationRepo});
+  final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
+  Set<int> selectedDays = {};
+  Set<int> selectedSlots = {};
+
+  final List<String> timeSlots = [
+    '8:00am - 10:00am',
+    '10:00am - 1:00pm',
+    '1:00pm - 4:00pm',
+    '4:00pm - 7:00pm',
+    '7:00pm - 10:00pm',
+  ];
+
+  void updateSelectedDays({required int index}) {
+    if (selectedDays.contains(index)) {
+      selectedDays.remove(index);
+    } else {
+      selectedDays.add(index);
+    }
+    update();
+  }
+
+  void updateSelectedSlots({required int index}) {
+    if (selectedSlots.contains(index)) {
+      selectedSlots.remove(index);
+    } else {
+      selectedSlots.add(index);
+    }
+    update();
+  }
+
+ void setSelectedState({required String state}) {
+  selectedState = state;
+  update();
+ }
   Future<void> loginUser({
     required String email,
     required String password,
