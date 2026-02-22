@@ -1,3 +1,4 @@
+import 'package:machine_task_app/controller/authentication_controller.dart';
 import 'package:machine_task_app/core/constants/app_imports.dart';
 import 'package:machine_task_app/view/screens/authentication/all_done_page.dart';
 import 'package:machine_task_app/view/widgets/authentication/auth_page_small_widget.dart';
@@ -59,7 +60,12 @@ class _BussinessHoursSetPageState extends State<BussinessHoursSetPage> {
             isBackButtonOnLeft: true,
             buttonName: "Continue",
             onPressed: () {
-              Get.offAll(()=> AllDonePage());
+              if (Get.find<AuthenticationController>().selectedDays.isNotEmpty && Get.find<AuthenticationController>().selectedSlots.isNotEmpty) {
+                Get.find<AuthenticationController>().registerUser();
+              } else {
+                AppCommonMethods.commonSnackbar(title: "Error", message: "Please select at least one day and time slot.");
+                
+              }
             },
           ),
         ),

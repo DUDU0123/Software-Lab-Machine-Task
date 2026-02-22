@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:machine_task_app/core/constants/app_assets.dart';
-import 'package:machine_task_app/utils/app_colors.dart';
-
+import 'package:file_picker/file_picker.dart';
+import 'package:machine_task_app/controller/authentication_controller.dart';
+import 'package:machine_task_app/core/constants/app_imports.dart';
 class AppCommonMethods {
   static TextStyle commonTextStyle({
     Color? color,
@@ -27,6 +25,36 @@ class AppCommonMethods {
       shadows: shadows,
     );
   }
+
+  static Future<void> pickFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowMultiple: false,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+      );
+      if (result != null) {
+        String fileName = result.files.single.name;
+        Get.find<AuthenticationController>().setRegistrationProofFileName(fileName: fileName);
+        debugPrint("Selected file: $fileName");
+      } else {
+        debugPrint("File picking cancelled by user.");
+      }
+    } catch (e) {
+      debugPrint("Error picking file: ${e.toString()}");
+    }
+  }
+
+  static void commonSnackbar({required String title, required String message}) {
+    Get.showSnackbar(GetSnackBar(
+      title: title,
+      message: message,
+      backgroundColor: AppColors.kBlack,
+      duration: Duration(seconds: 1),
+    ));
+  }
+
+  static final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 
   // onboarding screen data
   static List<Map<String, dynamic>> onboardingData = [

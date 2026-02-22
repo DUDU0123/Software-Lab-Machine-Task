@@ -138,7 +138,16 @@ class _FarmInfoPageState extends State<FarmInfoPage> {
             isBackButtonOnLeft: true,
             buttonName: "Continue",
             onPressed: () {
-              Get.to(()=> VerificationPage());
+              if (businessNameController.text.isNotEmpty &&
+                  zipCodeController.text.isNotEmpty &&
+                  informalNameController.text.isNotEmpty &&
+                  streetAddressController.text.isNotEmpty &&
+                  cityController.text.isNotEmpty &&
+                  Get.find<AuthenticationController>().selectedState != null) {
+                    Get.to(()=> VerificationPage());
+                  } else {
+                    AppCommonMethods.commonSnackbar(title: "Error", message: "Please fill all the fields correctly.");
+                  }
             },
           ),
         ),

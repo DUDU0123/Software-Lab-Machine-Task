@@ -1,12 +1,25 @@
 import 'package:machine_task_app/core/constants/app_imports.dart';
 import 'package:machine_task_app/view/screens/authentication/login/login_page.dart';
+import 'package:machine_task_app/view/screens/authentication/verify_otp/verify_otp_page.dart';
 import 'package:machine_task_app/view/widgets/authentication/auth_page_small_widget.dart';
 import 'package:machine_task_app/view/widgets/authentication/auth_text_field_widget.dart';
 import 'package:machine_task_app/view/widgets/authentication/farmer_eats_text_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-class ForgotPasswordPage extends StatelessWidget {
+class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
 
+  @override
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
+}
+
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+  TextEditingController phoneNumberController = TextEditingController();
+
+  @override
+  void dispose() {
+    phoneNumberController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +47,8 @@ class ForgotPasswordPage extends StatelessWidget {
                   ),
                 AppConstraints.kHeight72,
                 AuthTextFieldWidget(
+                  controller: phoneNumberController,
+                  keyboardType: TextInputType.phone,
                   hintText: "Phone Number",
                   prefixIcon: SvgPicture.asset(AppAssets.phoneIcon,height: 15.h, width: 15.w,),
                 ),
@@ -41,7 +56,10 @@ class ForgotPasswordPage extends StatelessWidget {
                 AuthPageLongButtonWidget(
                   buttonText: "Send Code",
                   onPressed: () {
-                    
+                    if (phoneNumberController.text.isNotEmpty) {
+                      // send code and then navigate to verify otp page
+                      Get.to(()=> VerifyOtpPage());
+                    }
                   },
                 ),
                 ],

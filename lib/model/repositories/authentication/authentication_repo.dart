@@ -25,6 +25,12 @@ class AuthenticationRepo {
           "social_id": socialId,
         },
       );
+      debugPrint(response.data.toString());
+      if(response.data["success"] == true){
+        
+      } else {
+        throw Exception("Login failed: ${response.data["message"]}");
+      }
     } catch (e) {
       debugPrint("Exception on Login: ${e.toString()}");
     }
@@ -44,17 +50,37 @@ class AuthenticationRepo {
     required int zipCode,
     required String registrationProof,
     required Map<String, List<String>> businessHours,
-    required String deviceToken,
-    required String type,
-    required String socialId,
   }) async {
     try {
       final response = await dio.post(
         "${BackendConstants.baseUrl}${BackendConstants.registerEndpoint}",
-        data: {}
+        data: {
+          "full_name": fullName,
+          "email": email,
+          "phone": phone,
+          "password": password,
+          "role": role,
+          "business_name": businessName,
+          "informal_name": informalName,
+          "address": address,
+          "city": city,
+          "state": state,
+          "zip_code": zipCode,
+          "registration_proof": registrationProof,
+          "business_hours": businessHours,
+          "device_token": "0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx",
+          "type": "manual",
+          "social_id": "0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx"
+        }
       );
+      if(response.data["success"] == true){
+        debugPrint("Registration successful: ${response.data.toString()}");
+      } else {
+        throw Exception("Registration failed: ${response.data["message"]}");
+      }
     } catch (e) {
       debugPrint("Exception on Register: ${e.toString()}");
+      throw Exception("Something went wrong");
     }
   }
 

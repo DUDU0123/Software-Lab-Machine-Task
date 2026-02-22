@@ -1,7 +1,7 @@
+import 'package:machine_task_app/controller/authentication_controller.dart';
 import 'package:machine_task_app/core/constants/app_imports.dart';
 import 'package:machine_task_app/view/screens/authentication/forgot_password/forgot_password_page.dart';
 import 'package:machine_task_app/view/screens/authentication/register/pages/register_page.dart';
-import 'package:machine_task_app/view/screens/authentication/verify_otp/verify_otp_page.dart';
 import 'package:machine_task_app/view/widgets/authentication/auth_page_small_widget.dart';
 import 'package:machine_task_app/view/widgets/authentication/auth_text_field_widget.dart';
 import 'package:machine_task_app/view/widgets/authentication/farmer_eats_text_widget.dart';
@@ -31,62 +31,72 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Positioned(
             top: 120.h,
-             left: 0,
-              right: 0,
-               bottom: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 30.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  AuthPageTitleWidget(text: "Welcome back!",),
-                  AppConstraints.kHeight24,
-                  AuthPageSubTitleWidget(
-                    firstText: "New here? ",
-                    secondText: "Create account",
-                    onTap: () {
-                      Get.to(()=> RegisterPage());
-                    },
-                  ),
-                AppConstraints.kHeight72,
-                AuthTextFieldWidget(
-                  controller: emailController,
-                  hintText: "Email Address",
-                  prefixIcon: SvgPicture.asset(AppAssets.emailIcon,height: 15.h, width: 15.w,),
-                ),
-                AppConstraints.kHeight24,
-                AuthTextFieldWidget(
-                  controller: passwordController,
-                  hintText: "Password",
-                  prefixIcon: SvgPicture.asset(AppAssets.passwordLockIcon,height: 15.h, width: 15.w,),
-                  suffixIcon: Padding(
-                    padding: EdgeInsets.only(right: 14.w),
-                    child: GestureDetector(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    AuthPageTitleWidget(text: "Welcome back!",),
+                    AppConstraints.kHeight24,
+                    AuthPageSubTitleWidget(
+                      firstText: "New here? ",
+                      secondText: "Create account",
                       onTap: () {
-                        // Navigate to Forgot Password
-                        Get.to(()=> ForgotPasswordPage());
+                        Get.to(()=> RegisterPage());
                       },
-                      child: Text("Forgot?", style: AppCommonMethods.commonTextStyle(
-                        color: AppColors.kAppPrimaryColor,
-                        fontFamily: AppAssets.beVietnameProRegular,
-                        fontSize: 14.sp,
-                      ),),
+                    ),
+                  AppConstraints.kHeight72,
+                  AuthTextFieldWidget(
+                    keyboardType: TextInputType.emailAddress,
+                    controller: emailController,
+                    hintText: "Email Address",
+                    prefixIcon: SvgPicture.asset(AppAssets.emailIcon,height: 15.h, width: 15.w,),
+                  ),
+                  AppConstraints.kHeight24,
+                  AuthTextFieldWidget(
+                    controller: passwordController,
+                    hintText: "Password",
+                    prefixIcon: SvgPicture.asset(AppAssets.passwordLockIcon,height: 15.h, width: 15.w,),
+                    suffixIcon: Padding(
+                      padding: EdgeInsets.only(right: 14.w),
+                      child: GestureDetector(
+                        onTap: () {
+                          // Navigate to Forgot Password
+                          Get.to(()=> ForgotPasswordPage());
+                        },
+                        child: Text("Forgot?", style: AppCommonMethods.commonTextStyle(
+                          color: AppColors.kAppPrimaryColor,
+                          fontFamily: AppAssets.beVietnameProRegular,
+                          fontSize: 14.sp,
+                        ),),
+                      ),
                     ),
                   ),
+                  AppConstraints.kHeight32,
+                  AuthPageLongButtonWidget(
+                    buttonText: "Login",
+                    onPressed: () {
+                      Get.find<AuthenticationController>().loginUser(
+                        email: emailController.text,
+                        password: passwordController.text,
+                        role: "farmer",
+                        deviceToken: "0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx",
+                        type: "manual",
+                        socialId: "0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx"
+                      );
+                    },
+                  ),
+                  AppConstraints.kHeight32,
+                  OrLoginWithText(),
+                  AppConstraints.kHeight32,
+                  SocialLoginIcons()
+                  ],
                 ),
-                AppConstraints.kHeight32,
-                AuthPageLongButtonWidget(
-                  buttonText: "Login",
-                  onPressed: () {
-                    
-                  },
-                ),
-                AppConstraints.kHeight32,
-                OrLoginWithText(),
-                AppConstraints.kHeight32,
-                SocialLoginIcons()
-                ],
               ),
             ),
           ),

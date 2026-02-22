@@ -38,6 +38,7 @@ dependencies:
   dio: ^5.9.1
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.2.3
+  file_picker: ^10.3.10
 
 dev_dependencies:
   flutter_test:

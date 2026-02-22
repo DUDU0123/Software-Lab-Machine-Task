@@ -3,16 +3,18 @@ import 'package:machine_task_app/view/widgets/common/common_text_form_field_widg
 
 class AuthTextFieldWidget extends StatelessWidget {
   const AuthTextFieldWidget({
-    super.key, required this.hintText, this.prefixIcon, this.suffixIcon, this.controller,
+    super.key, required this.hintText, this.prefixIcon, this.suffixIcon, this.controller, this.keyboardType = TextInputType.text,
   });
   final String hintText;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final TextEditingController? controller;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return CommonTextFormFieldWidget(
+      keyboardType: keyboardType,
       controller: controller,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.r),

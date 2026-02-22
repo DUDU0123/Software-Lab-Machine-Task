@@ -65,6 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       AppConstraints.kHeight24,
                       AuthTextFieldWidget(
+                        keyboardType: TextInputType.emailAddress,
                         controller: emailController,
                         hintText: "Email Address",
                         prefixIcon: SvgPicture.asset(AppAssets.emailIcon,height: 15.h, width: 15.w,),
@@ -72,6 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       AppConstraints.kHeight24,
                       AuthTextFieldWidget(
                         controller: phoneNumberController,
+                        keyboardType: TextInputType.phone,
                         hintText: "Phone Number",
                         prefixIcon: SvgPicture.asset(AppAssets.phoneIcon,height: 15.h, width: 15.w,),
                       ),
@@ -92,7 +94,16 @@ class _RegisterPageState extends State<RegisterPage> {
                         isBackButtonOnLeft: false,
                         buttonName: "Continue",
                         onPressed: () {
-                          Get.to(()=> FarmInfoPage());
+                          if (emailController.text.isNotEmpty &&
+                              passwordController.text.isNotEmpty &&
+                              fullNameController.text.isNotEmpty &&
+                              phoneNumberController.text.isNotEmpty &&
+                              reEnterPasswordController.text.isNotEmpty && AppCommonMethods.emailRegex.hasMatch(emailController.text) &&
+                              passwordController.text == reEnterPasswordController.text) {
+                            Get.to(()=> FarmInfoPage());
+                          } else {
+                            AppCommonMethods.commonSnackbar(title: "Error", message: "Please fill all the fields correctly.");
+                          }
                         },
                       ),
                       AppConstraints.kHeight32,

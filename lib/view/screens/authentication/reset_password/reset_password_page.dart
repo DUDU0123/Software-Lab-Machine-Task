@@ -63,7 +63,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 AuthPageLongButtonWidget(
                   buttonText: "Submit",
                   onPressed: () {
-                    
+                    if (newPasswordController.text.isNotEmpty && confirmNewPasswordController.text.isNotEmpty && newPasswordController.text == confirmNewPasswordController.text) {
+                      // reset password logic and navigating to login page after successful reset
+                      Get.to(()=> LoginPage());
+                    } else {
+                      AppCommonMethods.commonSnackbar(title: "Error", message: "Enter valid matching passwords");
+                    }
                   },
                 ),
                 ],

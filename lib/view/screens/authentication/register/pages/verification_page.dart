@@ -1,4 +1,5 @@
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:machine_task_app/controller/authentication_controller.dart';
 import 'package:machine_task_app/core/constants/app_imports.dart';
 import 'package:machine_task_app/view/screens/authentication/register/pages/bussiness_hours_set_page.dart';
 import 'package:machine_task_app/view/widgets/authentication/auth_page_small_widget.dart';
@@ -45,33 +46,46 @@ class VerificationPage extends StatelessWidget {
                             fontSize: 14.sp,
                             decoration: TextDecoration.underline
                           ),),
-                          CircleAvatar(
-                            radius: 20.r,
-                            backgroundColor: AppColors.kAppPrimaryColor,
-                            child: SvgPicture.asset(AppAssets.cameraIcon, height: 14.33.h, width: 23.96.w,),
+                          GestureDetector(
+                            onTap: () async {
+                              await AppCommonMethods.pickFile();
+                            },
+                            child: CircleAvatar(
+                              radius: 20.r,
+                              backgroundColor: AppColors.kAppPrimaryColor,
+                              child: SvgPicture.asset(AppAssets.cameraIcon, height: 14.33.h, width: 23.96.w,),
+                            ),
                           )
                         ],
                       ),
-                      AppConstraints.kHeight40,
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.kGrey.withAlpha(60),
-                          borderRadius: BorderRadius.circular(8.r)
+                        AppConstraints.kHeight40,
+                        GetBuilder<AuthenticationController>(
+                          builder: (authenticationController) {
+                            if(authenticationController.registrationProofFileName.isEmpty) {
+                              return const SizedBox.shrink();
+                            } else {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.kGrey.withAlpha(60),
+                                borderRadius: BorderRadius.circular(8.r)
+                              ),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 0),
+                                title: Text(authenticationController.registrationProofFileName, style: AppCommonMethods.commonTextStyle(
+                                  color: AppColors.kBlack,
+                                  fontFamily: AppAssets.beVietnameProRegular,
+                                  fontSize: 14.sp,
+                                ),),
+                                trailing: GestureDetector(
+                                  onTap: () {
+                                    authenticationController.setRegistrationProofFileName(fileName: '');
+                                  },
+                                  child: Icon(Icons.close, size: 18.sp, color: AppColors.kGrey,)),
+                              ),
+                            );
+                            }
+                          }
                         ),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 0),
-                          title: Text("Florida Fresh Certificate.pdf", style: AppCommonMethods.commonTextStyle(
-                            color: AppColors.kBlack,
-                            fontFamily: AppAssets.beVietnameProRegular,
-                            fontSize: 14.sp,
-                          ),),
-                          trailing: GestureDetector(
-                            onTap: () {
-
-                            },
-                            child: Icon(Icons.close, size: 18.sp, color: AppColors.kGrey,)),
-                        ),
-                      ),
                     ],
                   ),
                 ),

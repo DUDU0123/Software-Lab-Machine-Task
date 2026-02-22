@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:machine_task_app/model/repositories/authentication/authentication_repo.dart';
+import 'package:machine_task_app/utils/app_common_methods.dart';
+import 'package:machine_task_app/view/screens/authentication/all_done_page.dart';
 
 class AuthenticationController extends GetxController{
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController reEnterPasswordController = TextEditingController();
+  TextEditingController businessNameController = TextEditingController();
+  TextEditingController informalNameController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController streetAddressController = TextEditingController();
+  TextEditingController zipCodeController = TextEditingController();
+
+
   final AuthenticationRepo authenticationRepo;
   String? selectedState;
 
   AuthenticationController({required this.authenticationRepo});
   final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
+  final List<String> apiDays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
   Set<int> selectedDays = {};
   Set<int> selectedSlots = {};
+  String registrationProofFileName = '';
 
   final List<String> timeSlots = [
     '8:00am - 10:00am',
@@ -19,12 +35,30 @@ class AuthenticationController extends GetxController{
     '7:00pm - 10:00pm',
   ];
 
+  void disposeControllers() {
+    emailController.dispose();
+    passwordController.dispose();
+    fullNameController.dispose();
+    phoneNumberController.dispose();
+    reEnterPasswordController.dispose();
+    businessNameController.dispose();
+    informalNameController.dispose();
+    cityController.dispose();
+    streetAddressController.dispose();
+    zipCodeController.dispose();
+  }
+
   void updateSelectedDays({required int index}) {
     if (selectedDays.contains(index)) {
       selectedDays.remove(index);
     } else {
       selectedDays.add(index);
     }
+    update();
+  }
+
+  void setRegistrationProofFileName({required String fileName}) {
+    registrationProofFileName = fileName;
     update();
   }
 
@@ -50,41 +84,54 @@ class AuthenticationController extends GetxController{
     required String socialId,
   }) async {
     try {
-      //call repo
-      await authenticationRepo.loginUser(
-        email: email,
-        password: password,
-        role: role,
-        deviceToken: deviceToken,
-        type: type,
-        socialId: socialId,
-      );
+      if (email.isNotEmpty && password.isNotEmpty && AppCommonMethods.emailRegex.hasMatch(email)) {
+        final value = await authenticationRepo.loginUser(
+          email: email,
+          password: password,
+          role: "farmer",
+          deviceToken: "0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx",
+          type: "manual",
+          socialId: "0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx",
+        );
+      } else {
+        AppCommonMethods.commonSnackbar(title: "Error", message: "Please enter valid email and password.");
+        return;
+        
+      }
     } catch (e) {
       debugPrint("Exception on Login: ${e.toString()}");
     }
   }
 
-  void registerUser() {
+  Future<void> registerUser() async {
     try {
+      final Map<String, List<String>> businessHours = {};
+
+      for (int dayIndex in selectedDays) {
+        businessHours[apiDays[dayIndex]] =
+            selectedSlots.map((slotIndex) => timeSlots[slotIndex]).toList();
+      }
       //call repo
-      // await authenticationRepo.registerUser(
-      //   fullName: fullName,
-      //   email: email,
-      //   phone: phone,
-      //   password: password,
-      //   role: role,
-      //   businessName: businessName,
-      //   informalName: informalName,
-      //   address: address,
-      //   city: city,
-      //   state: state,
-      //   zipCode: zipCode,
-      //   registrationProof: registrationProof,
-      //   businessHours: businessHours,
-      //   deviceToken: deviceToken,
-      //   type: type, 
-      //   socialId: socialId,
-      // );
+      final value = await authenticationRepo.registerUser(
+        fullName: fullNameController.text,
+        email: emailController.text,
+        phone: phoneNumberController.text,
+        password: passwordController.text,
+        role: "farmer",
+        businessName: businessNameController.text,
+        informalName: informalNameController.text,
+        address: streetAddressController.text,
+        city: cityController.text,
+        state: selectedState!,
+        zipCode: int.tryParse(zipCodeController.text) ?? 0,
+        registrationProof: registrationProofFileName,
+        businessHours: businessHours,
+      );
+      if (value == true) {
+        Get.offAll(const AllDonePage());
+      } else {
+        AppCommonMethods.commonSnackbar(title: "Error", message: "Registration failed. Please try again.");
+      }
     } catch (e) {
       debugPrint("Exception on Register: ${e.toString()}");
     }
@@ -92,7 +139,7 @@ class AuthenticationController extends GetxController{
 
   Future<void> forgotPassword({required String mobileNumber}) async {
     try {
-      await authenticationRepo.forgotPassword(mobileNumber: mobileNumber);
+      final value = await authenticationRepo.forgotPassword(mobileNumber: mobileNumber);
     } catch (e) {
       debugPrint("Exception on Forgot Password: ${e.toString()}");
     }
@@ -100,7 +147,7 @@ class AuthenticationController extends GetxController{
 
   Future<void> verifyOtp({required String otp}) async{
     try {
-      await authenticationRepo.verifyOtp(otp: otp);
+      final value = await authenticationRepo.verifyOtp(otp: otp);
     } catch (e) {
       debugPrint("Exception on Verify OTP: ${e.toString()}");
     }
@@ -108,7 +155,7 @@ class AuthenticationController extends GetxController{
 
   Future<void> resetPassword({required String token, required String newPassword, required String confirmPassword}) async {
     try {
-      await authenticationRepo.resetPassword(token: token, newPassword: newPassword, confirmPassword: confirmPassword);
+      final value = await authenticationRepo.resetPassword(token: token, newPassword: newPassword, confirmPassword: confirmPassword);
     } catch (e) {
       debugPrint("Exception on Reset Password: ${e.toString()}");
     }

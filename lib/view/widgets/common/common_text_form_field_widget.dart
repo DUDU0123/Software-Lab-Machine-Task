@@ -36,6 +36,11 @@ class CommonTextFormFieldWidget extends StatelessWidget {
     this.inputFormatters,
     this.onTapOutsideInnerFunction,
     this.suffixIcon,
+    this.maxLength,
+    this.counterText,
+    this.decoration,
+    this.style,
+    this.textAlign = TextAlign.start,
   });
 
   final TextEditingController? controller;
@@ -59,6 +64,7 @@ class CommonTextFormFieldWidget extends StatelessWidget {
   final String? labelText;
   final TextStyle? labelStyle;
   final Color? fillColor;
+  final int? maxLength;
   final TextInputType? keyboardType;
   final bool readOnly;
   final TextStyle? hintStyle;
@@ -66,10 +72,16 @@ class CommonTextFormFieldWidget extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final void Function()? onTapOutsideInnerFunction;
   final Widget? suffixIcon;
+  final String? counterText;
+  final InputDecoration? decoration;
+  final TextStyle? style;
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textAlign: textAlign,
+      maxLength: maxLength,
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
         if (onTapOutsideInnerFunction != null) {
@@ -90,7 +102,9 @@ class CommonTextFormFieldWidget extends StatelessWidget {
       validator: validator,
       obscureText: obscureText ?? false,
       showCursor: showCursor ?? true,
-      decoration: InputDecoration(
+      style: style,
+      decoration: decoration ?? InputDecoration(
+        counterText: counterText,
         contentPadding: EdgeInsets.symmetric(vertical: 10.h),
         hintText: hintText,
         border: border,
