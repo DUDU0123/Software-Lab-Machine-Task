@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:machine_task_app/core/constants/app_assets.dart';
 import 'package:machine_task_app/utils/app_colors.dart';
+import 'package:machine_task_app/utils/app_common_methods.dart';
 
 class CommonTextFormFieldWidget extends StatelessWidget {
   const CommonTextFormFieldWidget({
@@ -89,27 +91,39 @@ class CommonTextFormFieldWidget extends StatelessWidget {
       obscureText: obscureText ?? false,
       showCursor: showCursor ?? true,
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 10.h),
         hintText: hintText,
         border: border,
         focusedBorder: focusedBorder ?? border,
         errorBorder: errorBorder ?? border,
         disabledBorder: disabledBorder ?? border,
-        prefix: prefixWidget,
+        prefixIcon: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
+          child: prefixWidget,
+        ),
         suffix: suffixWidget,
         filled: filled,
         labelText: labelText,
         floatingLabelStyle: TextStyle(
           color: AppColors.kAppPrimaryColor,
           fontSize: 14.sp,
+          fontFamily: AppAssets.beVietnameProMedium
         ),
         labelStyle: labelStyle,
         fillColor: fillColor,
-        hintStyle: hintStyle,
+        hintStyle: hintStyle ?? AppCommonMethods.commonTextStyle(
+          fontSize: 14.sp,
+          fontFamily: AppAssets.beVietnameProRegular,
+          color: AppColors.kGrey
+        ),
         enabledBorder: enabledBorder ?? border,
         suffixIcon: suffixIcon,
         suffixIconConstraints: BoxConstraints(
           minWidth: 10.w, minHeight: 10.h,
-        )
+        ),
+        prefixIconConstraints: BoxConstraints(
+          minWidth: 10.w, minHeight: 10.h,
+        ),
       ),
     );
   }

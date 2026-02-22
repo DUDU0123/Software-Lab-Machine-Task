@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:machine_task_app/controller/onboarding_controller.dart';
+import 'package:machine_task_app/core/constants/app_imports.dart';
+import 'package:machine_task_app/view/widgets/onboarding/onbarding_page_data_container.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -9,138 +11,48 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   final PageController _pageController = PageController();
-  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: PageView.builder(
         controller: _pageController,
-        itemCount: onboardingData.length,
+        itemCount: AppCommonMethods.onboardingData.length,
         onPageChanged: (index) {
-          setState(() {
-            currentIndex = index;
-          });
+          Get.find<OnboardingController>().updateIndex(index: index);
         },
         itemBuilder: (context, index) {
-          final data = onboardingData[index];
+          final data = AppCommonMethods.onboardingData[index];
 
           return Stack(
             children: [
+              Container(
+                color: data['color'],
+              ),
               /// Top Image
-              SizedBox(
-                height: size.height,
-                width: size.width,
-                child: Image.asset(
-                  data['image']!,
-                  fit: BoxFit.cover,
+              Positioned(
+                top: 32.h,
+                left: 0,
+                right: 0,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      data['image']!,
+                      fit: BoxFit.cover,
+                    ),
+                    AppConstraints.kHeight19,
+                  ],
                 ),
               ),
 
               /// Bottom Card
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: size.height * 0.38,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(32),
-                      topRight: Radius.circular(32),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            data['title']!,
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            data['description']!,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.black54,
-                              height: 1.5,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      /// Dots
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          onboardingData.length,
-                          (dotIndex) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 4),
-                              width: currentIndex == dotIndex ? 20 : 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: currentIndex == dotIndex
-                                    ? Colors.black
-                                    : Colors.black26,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-
-                      /// Buttons
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: double.infinity,
-                            height: 48,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // Navigate to Register
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF6AA84F),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                              ),
-                              child: const Text(
-                                'Join the movement!',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextButton(
-                            onPressed: () {
-                              // Navigate to Login
-                            },
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(
-                                color: Colors.black,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: OnboardingPageDataContainer(data: data),
               ),
             ],
           );
@@ -149,20 +61,4 @@ class _OnboardingPageState extends State<OnboardingPage> {
     );
   }
 }
-List<Map<String, String>> onboardingData = [
-  {
-    'title': 'Quality',
-    'description': "Sell your farm fresh products directly to\nconsumers, cutting out the middleman and\nreducing emissions of the global supply chain.",
-    'image': 'assets/images/onboarding1.png',
-  },
-  {
-    'title': 'Convenient',
-    'description': "Our team of delivery drivers will make sure\nyour orders are picked up on time and\npromptly delivered to your customers.",
-    'image': 'assets/images/onboarding2.png',
-  },
-  {
-    'title': 'Local',
-    'description': "We love the earth and know you do too! Join us\nin reducing our local carbon footprint one order\nat a time. ",
-    'image': 'assets/images/onboarding3.png',
-  },
-];
+
