@@ -1,6 +1,5 @@
 import 'package:machine_task_app/controller/authentication_controller.dart';
 import 'package:machine_task_app/core/constants/app_imports.dart';
-import 'package:machine_task_app/view/screens/authentication/all_done_page.dart';
 import 'package:machine_task_app/view/widgets/authentication/auth_page_small_widget.dart';
 import 'package:machine_task_app/view/widgets/authentication/continue_and_login_button_widget.dart';
 import 'package:machine_task_app/view/widgets/authentication/day_selector_widget.dart';
@@ -15,6 +14,11 @@ class BussinessHoursSetPage extends StatefulWidget {
 }
 
 class _BussinessHoursSetPageState extends State<BussinessHoursSetPage> {
+  @override
+  void dispose() {
+    Get.find<AuthenticationController>().disposeControllers();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -56,17 +60,21 @@ class _BussinessHoursSetPageState extends State<BussinessHoursSetPage> {
         ),
         bottomNavigationBar: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20.h),
-          child: ContinueAndLoginButtonWidget(
-            isBackButtonOnLeft: true,
-            buttonName: "Continue",
-            onPressed: () {
-              if (Get.find<AuthenticationController>().selectedDays.isNotEmpty && Get.find<AuthenticationController>().selectedSlots.isNotEmpty) {
-                Get.find<AuthenticationController>().registerUser();
-              } else {
-                AppCommonMethods.commonSnackbar(title: "Error", message: "Please select at least one day and time slot.");
-                
-              }
-            },
+          child: GetBuilder<AuthenticationController>(
+            builder: (authenticationController) {
+              return ContinueAndLoginButtonWidget(
+                isButtonLoading: authenticationController.isRegisterationCompleteLoading,
+                isBackButtonOnLeft: true,
+                buttonName: "Continue",
+                onPressed: () {
+                  if (Get.find<AuthenticationController>().selectedDays.isNotEmpty && Get.find<AuthenticationController>().selectedSlots.isNotEmpty) {
+                    Get.find<AuthenticationController>().registerUser();
+                  } else {
+                    AppCommonMethods.commonSnackbar(title: "Error", message: "Please select at least one day and time slot.");
+                  }
+                },
+              );
+            }
           ),
         ),
       ),

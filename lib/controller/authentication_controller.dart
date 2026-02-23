@@ -19,6 +19,8 @@ class AuthenticationController extends GetxController{
 
   final AuthenticationRepo authenticationRepo;
   String? selectedState;
+  bool isRegisterationCompleteLoading = false;
+  bool isLoginProcessLoading = false;
 
   AuthenticationController({required this.authenticationRepo});
   final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
@@ -84,8 +86,10 @@ class AuthenticationController extends GetxController{
     required String socialId,
   }) async {
     try {
+      isLoginProcessLoading = true;
+      update();
       if (email.isNotEmpty && password.isNotEmpty && AppCommonMethods.emailRegex.hasMatch(email)) {
-        final value = await authenticationRepo.loginUser(
+        final bool value = await authenticationRepo.loginUser(
           email: email,
           password: password,
           role: "farmer",
@@ -93,18 +97,34 @@ class AuthenticationController extends GetxController{
           type: "manual",
           socialId: "0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx",
         );
+        if (value) {
+          isLoginProcessLoading = false;
+          update();
+          AppCommonMethods.commonSnackbar(title: "Success", message: "Login Success");
+        } else {
+          isLoginProcessLoading = false;
+          update();
+          AppCommonMethods.commonSnackbar(title: "Error", message: "Something went wrong");
+        }
       } else {
+        isLoginProcessLoading = false;
+        update();
         AppCommonMethods.commonSnackbar(title: "Error", message: "Please enter valid email and password.");
         return;
-        
       }
     } catch (e) {
+      isLoginProcessLoading = false;
+      update();
       debugPrint("Exception on Login: ${e.toString()}");
+      AppCommonMethods.commonSnackbar(title: "Error", message: "Something went wrong");
+      return;
     }
   }
 
   Future<void> registerUser() async {
     try {
+      isRegisterationCompleteLoading = true;
+      update();
       final Map<String, List<String>> businessHours = {};
 
       for (int dayIndex in selectedDays) {
@@ -112,7 +132,7 @@ class AuthenticationController extends GetxController{
             selectedSlots.map((slotIndex) => timeSlots[slotIndex]).toList();
       }
       //call repo
-      final value = await authenticationRepo.registerUser(
+      final bool value = await authenticationRepo.registerUser(
         fullName: fullNameController.text,
         email: emailController.text,
         phone: phoneNumberController.text,
@@ -128,12 +148,20 @@ class AuthenticationController extends GetxController{
         businessHours: businessHours,
       );
       if (value == true) {
-        Get.offAll(const AllDonePage());
+        isRegisterationCompleteLoading = false;
+        update();
+        Get.offAll(() => const AllDonePage());
       } else {
+        isRegisterationCompleteLoading = false;
+        update();
         AppCommonMethods.commonSnackbar(title: "Error", message: "Registration failed. Please try again.");
+        return;
       }
     } catch (e) {
+      isRegisterationCompleteLoading = false;
+      update();
       debugPrint("Exception on Register: ${e.toString()}");
+      AppCommonMethods.commonSnackbar(title: "Error", message: "Something went wrong");
     }
   }
 

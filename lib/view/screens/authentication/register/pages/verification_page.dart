@@ -18,9 +18,9 @@ class VerificationPage extends StatelessWidget {
           children: [
             Positioned(
               top: 90.h,
-               left: 0,
-                right: 0,
-                 bottom: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30.w),
                 child: SingleChildScrollView(

@@ -5,7 +5,7 @@ import 'package:machine_task_app/core/constants/backend_constants.dart';
 class AuthenticationRepo {
   final Dio dio;
   AuthenticationRepo({required this.dio});
-  loginUser({
+  Future<bool> loginUser({
     required String email,
     required String password,
     required String role,
@@ -27,16 +27,17 @@ class AuthenticationRepo {
       );
       debugPrint(response.data.toString());
       if(response.data["success"] == true){
-        
+        return true;
       } else {
         throw Exception("Login failed: ${response.data["message"]}");
       }
     } catch (e) {
       debugPrint("Exception on Login: ${e.toString()}");
+      return false;
     }
   }
 
-  registerUser({
+  Future<bool> registerUser({
     required String fullName,
     required String email,
     required String phone,
@@ -74,7 +75,9 @@ class AuthenticationRepo {
         }
       );
       if(response.data["success"] == true){
+        response.data["token"];
         debugPrint("Registration successful: ${response.data.toString()}");
+        return true;
       } else {
         throw Exception("Registration failed: ${response.data["message"]}");
       }

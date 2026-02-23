@@ -7,29 +7,11 @@ import 'package:machine_task_app/view/widgets/authentication/continue_and_login_
 import 'package:machine_task_app/view/widgets/authentication/farmer_eats_text_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:machine_task_app/view/widgets/common/common_grey_small_text_widget.dart';
-class FarmInfoPage extends StatefulWidget {
-  const FarmInfoPage({super.key});
+class FarmInfoPage extends StatelessWidget {
+  FarmInfoPage({super.key});
 
-  @override
-  State<FarmInfoPage> createState() => _FarmInfoPageState();
-}
+  final authController = Get.find<AuthenticationController>();
 
-class _FarmInfoPageState extends State<FarmInfoPage> {
-  TextEditingController businessNameController = TextEditingController();
-  TextEditingController informalNameController = TextEditingController();
-  TextEditingController cityController = TextEditingController();
-  TextEditingController streetAddressController = TextEditingController();
-  TextEditingController zipCodeController = TextEditingController();
-
-  @override
-  void dispose() {
-    businessNameController.dispose();
-    informalNameController.dispose();
-    cityController.dispose();
-    streetAddressController.dispose();
-    zipCodeController.dispose();
-    super.dispose();
-  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -39,9 +21,9 @@ class _FarmInfoPageState extends State<FarmInfoPage> {
           children: [
             Positioned(
               top: 90.h,
-               left: 0,
-                right: 0,
-                 bottom: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30.w),
                 child: SingleChildScrollView(
@@ -54,25 +36,25 @@ class _FarmInfoPageState extends State<FarmInfoPage> {
                       AuthPageTitleWidget(text: "Farm Info",),
                       AppConstraints.kHeight40,
                       AuthTextFieldWidget(
-                        controller: businessNameController,
+                        controller: authController.businessNameController,
                         hintText: "Business Name",
                         prefixIcon: SvgPicture.asset(AppAssets.personIcon,height: 15.h, width: 15.w,),
                       ),
                       AppConstraints.kHeight24,
                       AuthTextFieldWidget(
-                        controller: informalNameController,
+                        controller: authController.informalNameController,
                         hintText: "Informal Name",
                         prefixIcon: SvgPicture.asset(AppAssets.emailIcon,height: 15.h, width: 15.w,),
                       ),
                       AppConstraints.kHeight24,
                       AuthTextFieldWidget(
-                        controller: streetAddressController,
+                        controller: authController.streetAddressController,
                         hintText: "Street Address",
                         prefixIcon: SvgPicture.asset(AppAssets.phoneIcon,height: 15.h, width: 15.w,),
                       ),
                       AppConstraints.kHeight24,
                       AuthTextFieldWidget(
-                        controller: cityController,
+                        controller: authController.cityController,
                         hintText: "City",
                         prefixIcon: SvgPicture.asset(AppAssets.passwordLockIcon,height: 15.h, width: 15.w,),
                       ),
@@ -118,7 +100,8 @@ class _FarmInfoPageState extends State<FarmInfoPage> {
                           AppConstraints.kWidth16,
                           Expanded(
                             child: AuthTextFieldWidget(
-                              controller: zipCodeController,
+                              keyboardType: TextInputType.phone,
+                              controller: authController.zipCodeController,
                               hintText: "Zipcode",
                             ),
                           ),
@@ -138,11 +121,11 @@ class _FarmInfoPageState extends State<FarmInfoPage> {
             isBackButtonOnLeft: true,
             buttonName: "Continue",
             onPressed: () {
-              if (businessNameController.text.isNotEmpty &&
-                  zipCodeController.text.isNotEmpty &&
-                  informalNameController.text.isNotEmpty &&
-                  streetAddressController.text.isNotEmpty &&
-                  cityController.text.isNotEmpty &&
+              if (authController.businessNameController.text.isNotEmpty &&
+                  authController.zipCodeController.text.isNotEmpty &&
+                  authController.informalNameController.text.isNotEmpty &&
+                  authController.streetAddressController.text.isNotEmpty &&
+                  authController.cityController.text.isNotEmpty &&
                   Get.find<AuthenticationController>().selectedState != null) {
                     Get.to(()=> VerificationPage());
                   } else {

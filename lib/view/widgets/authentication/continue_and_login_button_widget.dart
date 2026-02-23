@@ -5,11 +5,12 @@ import 'package:machine_task_app/view/widgets/common/common_button_widget.dart';
 
 class ContinueAndLoginButtonWidget extends StatelessWidget {
   const ContinueAndLoginButtonWidget({
-    super.key, this.onPressed, required this.buttonName, required this.isBackButtonOnLeft,
+    super.key, this.onPressed, required this.buttonName, required this.isBackButtonOnLeft, this.isButtonLoading = false,
   });
   final void Function()? onPressed;
   final String buttonName;
   final bool isBackButtonOnLeft;
+  final bool isButtonLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,9 @@ class ContinueAndLoginButtonWidget extends StatelessWidget {
             Get.back();
           },
           child: SvgPicture.asset(AppAssets.leftArrowIcon, height: 11.67.h, width: 6.67.w,)),
-        CommonButtonWidget(
+          isButtonLoading ? CircularProgressIndicator(
+                  color: AppColors.kAppPrimaryColor,
+                ) : CommonButtonWidget(
           onPressed: onPressed,
           btnText: buttonName,
           buttonColor: AppColors.kAppPrimaryColor,

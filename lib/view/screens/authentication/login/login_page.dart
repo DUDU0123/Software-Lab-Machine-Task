@@ -78,19 +78,29 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   AppConstraints.kHeight32,
-                  AuthPageLongButtonWidget(
-                    buttonText: "Login",
-                    onPressed: () {
-                      Get.find<AuthenticationController>().loginUser(
-                        email: emailController.text,
-                        password: passwordController.text,
-                        role: "farmer",
-                        deviceToken: "0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx",
-                        type: "manual",
-                        socialId: "0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx"
+                  GetBuilder<AuthenticationController>(builder: (authenticationController) {
+                    if (authenticationController.isLoginProcessLoading) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                        color: AppColors.kAppPrimaryColor,
+                        ),
                       );
-                    },
-                  ),
+                    } else {
+                      return AuthPageLongButtonWidget(
+                        buttonText: "Login",
+                        onPressed: () {
+                          Get.find<AuthenticationController>().loginUser(
+                            email: emailController.text,
+                            password: passwordController.text,
+                            role: "farmer",
+                            deviceToken: "0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx",
+                            type: "manual",
+                            socialId: "0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx"
+                          );
+                        },
+                      );
+                    }
+                  },),
                   AppConstraints.kHeight32,
                   OrLoginWithText(),
                   AppConstraints.kHeight32,
