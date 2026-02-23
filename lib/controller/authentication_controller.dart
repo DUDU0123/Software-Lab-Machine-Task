@@ -158,8 +158,7 @@ class AuthenticationController extends GetxController{
     } catch (e) {
       isLoginProcessLoading = false;
       update();
-      debugPrint("Exception on Login: ${e.toString()}");
-      AppCommonMethods.commonSnackbar(title: "Error", message: "Something went wrong");
+      AppCommonMethods.commonSnackbar(title: "Error", message: e.toString());
       return;
     }
   }
@@ -204,7 +203,6 @@ class AuthenticationController extends GetxController{
     } catch (e) {
       isRegisterationCompleteLoading = false;
       update();
-      debugPrint("Exception on Register: ${e.toString()}");
       AppCommonMethods.commonSnackbar(title: "Error", message: e.toString());
     }
   }

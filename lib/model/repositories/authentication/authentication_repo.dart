@@ -31,7 +31,7 @@ class AuthenticationRepo {
         throw Exception("Login failed: ${response.data["message"]}");
       }
     } catch (e) {
-      return false;
+      throw Exception(e.toString());
     }
   }
 
@@ -79,7 +79,7 @@ class AuthenticationRepo {
         throw Exception("Registration failed: ${response.data["message"]}");
       }
     } catch (e) {
-      throw Exception("Something went wrong");
+      throw Exception(e.toString());
     }
   }
 
@@ -99,7 +99,7 @@ class AuthenticationRepo {
         throw Exception(["Something went wrong"]);
       }
     } catch (e) {
-      return false;
+      throw Exception(e.toString());
     }
   }
 
