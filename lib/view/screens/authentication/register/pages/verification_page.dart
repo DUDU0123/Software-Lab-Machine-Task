@@ -100,7 +100,11 @@ class VerificationPage extends StatelessWidget {
             isBackButtonOnLeft: true,
             buttonName: "Continue",
             onPressed: () {
-              Get.to(()=> BussinessHoursSetPage());
+              if (Get.find<AuthenticationController>().registrationProofFileName.isNotEmpty) {
+                Get.to(()=> BussinessHoursSetPage());
+              } else {
+                AppCommonMethods.commonSnackbar(title: "Error", message: "Please upload file to proceed further");
+              }
             },
           ),
         ),
