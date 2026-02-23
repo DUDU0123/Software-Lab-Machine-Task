@@ -25,36 +25,40 @@ class _OnboardingPageState extends State<OnboardingPage> {
         itemBuilder: (context, index) {
           final data = AppCommonMethods.onboardingData[index];
 
-          return Stack(
-            children: [
-              Container(
-                color: data['color'],
-              ),
-              /// Top Image
-              Positioned(
-                top: 32.h,
-                left: 0,
-                right: 0,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      data['image']!,
-                      fit: BoxFit.cover,
-                    ),
-                    AppConstraints.kHeight19,
-                  ],
+          return SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: double.infinity,
+            child: Stack(
+              children: [
+                Container(
+                  color: data['color'],
                 ),
-              ),
-
-              /// Bottom Card
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: OnboardingPageDataContainer(data: data),
-              ),
-            ],
+                /// Top Image
+                Positioned(
+                  top: 32.h,
+                  left: 0,
+                  right: 0,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        data['image']!,
+                        fit: BoxFit.cover,
+                      ),
+                      AppConstraints.kHeight19,
+                    ],
+                  ),
+                ),
+            
+                /// Bottom Card
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: OnboardingPageDataContainer(data: data),
+                ),
+              ],
+            ),
           );
         },
       ),
