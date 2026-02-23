@@ -1,3 +1,4 @@
+import 'package:machine_task_app/controller/authentication_controller.dart';
 import 'package:machine_task_app/core/constants/app_imports.dart';
 import 'package:machine_task_app/view/screens/authentication/login/login_page.dart';
 import 'package:machine_task_app/view/screens/authentication/verify_otp/verify_otp_page.dart';
@@ -56,9 +57,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 AuthPageLongButtonWidget(
                   buttonText: "Send Code",
                   onPressed: () {
-                    if (phoneNumberController.text.isNotEmpty) {
+                    if (phoneNumberController.text.isNotEmpty && phoneNumberController.text.length > 7) {
                       // send code and then navigate to verify otp page
-                      Get.to(()=> VerifyOtpPage());
+                      Get.find<AuthenticationController>().forgotPassword(mobileNumber: phoneNumberController.text);
+                    } else {
+                      AppCommonMethods.commonSnackbar(title: "Error", message: "Enter valid phone number");
                     }
                   },
                 ),

@@ -1,3 +1,4 @@
+import 'package:machine_task_app/controller/authentication_controller.dart';
 import 'package:machine_task_app/core/constants/app_imports.dart';
 import 'package:machine_task_app/view/screens/authentication/login/login_page.dart';
 import 'package:machine_task_app/view/widgets/authentication/auth_page_small_widget.dart';
@@ -64,8 +65,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   buttonText: "Submit",
                   onPressed: () {
                     if (newPasswordController.text.isNotEmpty && confirmNewPasswordController.text.isNotEmpty && newPasswordController.text == confirmNewPasswordController.text) {
-                      // reset password logic and navigating to login page after successful reset
-                      Get.to(()=> LoginPage());
+                      Get.find<AuthenticationController>().resetPassword(token: Get.find<AuthenticationController>().resetPasswordOtp, newPassword: newPasswordController.text, confirmPassword: confirmNewPasswordController.text);
                     } else {
                       AppCommonMethods.commonSnackbar(title: "Error", message: "Enter valid matching passwords");
                     }

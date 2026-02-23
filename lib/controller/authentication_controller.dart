@@ -1,26 +1,48 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:machine_task_app/model/repositories/authentication/authentication_repo.dart';
 import 'package:machine_task_app/utils/app_common_methods.dart';
 import 'package:machine_task_app/view/screens/authentication/all_done_page.dart';
+import 'package:machine_task_app/view/screens/authentication/login/login_page.dart';
+import 'package:machine_task_app/view/screens/authentication/reset_password/reset_password_page.dart';
+import 'package:machine_task_app/view/screens/authentication/verify_otp/verify_otp_page.dart';
 
 class AuthenticationController extends GetxController{
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController fullNameController = TextEditingController();
-  TextEditingController phoneNumberController = TextEditingController();
-  TextEditingController reEnterPasswordController = TextEditingController();
-  TextEditingController businessNameController = TextEditingController();
-  TextEditingController informalNameController = TextEditingController();
-  TextEditingController cityController = TextEditingController();
-  TextEditingController streetAddressController = TextEditingController();
-  TextEditingController zipCodeController = TextEditingController();
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController fullNameController;
+  late TextEditingController phoneNumberController;
+  late TextEditingController reEnterPasswordController;
+  late TextEditingController businessNameController;
+  late TextEditingController informalNameController;
+  late TextEditingController cityController;
+  late TextEditingController streetAddressController;
+  late TextEditingController zipCodeController;
+
+  @override
+  void onInit() {
+    super.onInit();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    fullNameController = TextEditingController();
+    phoneNumberController = TextEditingController();
+    reEnterPasswordController = TextEditingController();
+    businessNameController = TextEditingController();
+    informalNameController = TextEditingController();
+    cityController = TextEditingController();
+    streetAddressController = TextEditingController();
+    zipCodeController = TextEditingController();
+  }
 
 
   final AuthenticationRepo authenticationRepo;
   String? selectedState;
   bool isRegisterationCompleteLoading = false;
   bool isLoginProcessLoading = false;
+  String resetPasswordOtp = '';
+  String resetPasswordPhoneNumber = '';
 
   AuthenticationController({required this.authenticationRepo});
   final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
@@ -37,7 +59,8 @@ class AuthenticationController extends GetxController{
     '7:00pm - 10:00pm',
   ];
 
-  void disposeControllers() {
+  @override
+  void onClose() {
     emailController.dispose();
     passwordController.dispose();
     fullNameController.dispose();
@@ -48,6 +71,28 @@ class AuthenticationController extends GetxController{
     cityController.dispose();
     streetAddressController.dispose();
     zipCodeController.dispose();
+    super.onClose();
+  }
+
+  void resetRegistrationForm() {
+    emailController.clear();
+    passwordController.clear();
+    reEnterPasswordController.clear();
+    fullNameController.clear();
+    phoneNumberController.clear();
+    businessNameController.clear();
+    informalNameController.clear();
+    cityController.clear();
+    streetAddressController.clear();
+    zipCodeController.clear();
+
+    selectedDays.clear();
+    selectedSlots.clear();
+    selectedState = null;
+    registrationProofFileName = '';
+
+    isRegisterationCompleteLoading = false;
+    update();
   }
 
   void updateSelectedDays({required int index}) {
@@ -151,6 +196,7 @@ class AuthenticationController extends GetxController{
         isRegisterationCompleteLoading = false;
         update();
         Get.offAll(() => const AllDonePage());
+        resetRegistrationForm();
       } else {
         isRegisterationCompleteLoading = false;
         update();
@@ -161,31 +207,61 @@ class AuthenticationController extends GetxController{
       isRegisterationCompleteLoading = false;
       update();
       debugPrint("Exception on Register: ${e.toString()}");
-      AppCommonMethods.commonSnackbar(title: "Error", message: "Something went wrong");
+      AppCommonMethods.commonSnackbar(title: "Error", message: e.toString());
     }
   }
 
   Future<void> forgotPassword({required String mobileNumber}) async {
     try {
+      resetPasswordPhoneNumber = mobileNumber;
+      update();
       final value = await authenticationRepo.forgotPassword(mobileNumber: mobileNumber);
+      if (value == true) {
+        Get.to(()=> VerifyOtpPage());
+      } else {
+        AppCommonMethods.commonSnackbar(title: "Error", message: "Something went wrong");
+      }
     } catch (e) {
-      debugPrint("Exception on Forgot Password: ${e.toString()}");
+      AppCommonMethods.commonSnackbar(title: "Error", message: e.toString());
     }
   }
 
   Future<void> verifyOtp({required String otp}) async{
     try {
+      resetPasswordOtp = otp;
+      update();
       final value = await authenticationRepo.verifyOtp(otp: otp);
+      if (value == true) {
+        Get.to(()=> ResetPasswordPage());
+      } else {
+        AppCommonMethods.commonSnackbar(title: "Error", message: "Something went wrong");
+      }
     } catch (e) {
-      debugPrint("Exception on Verify OTP: ${e.toString()}");
+      AppCommonMethods.commonSnackbar(title: "Error", message: e.toString());
     }
   }
 
   Future<void> resetPassword({required String token, required String newPassword, required String confirmPassword}) async {
     try {
-      final value = await authenticationRepo.resetPassword(token: token, newPassword: newPassword, confirmPassword: confirmPassword);
+      final value = await authenticationRepo.resetPassword(token: resetPasswordOtp, newPassword: newPassword, confirmPassword: confirmPassword);
+      if (value == true) {
+        resetPasswordPhoneNumber = '';
+        resetPasswordOtp = '';
+        update();
+        Get.offUntil(MaterialPageRoute(builder: (context) {
+          return LoginPage();
+        },), (route) => false,);
+      } else {
+        resetPasswordPhoneNumber = '';
+        resetPasswordOtp = '';
+        update();
+        AppCommonMethods.commonSnackbar(title: "Error", message: "Something went wrong");
+      }
     } catch (e) {
-      debugPrint("Exception on Reset Password: ${e.toString()}");
+      resetPasswordPhoneNumber = '';
+      resetPasswordOtp = '';
+      update();
+      AppCommonMethods.commonSnackbar(title: "Error", message: e.toString());
     }
   }
 }

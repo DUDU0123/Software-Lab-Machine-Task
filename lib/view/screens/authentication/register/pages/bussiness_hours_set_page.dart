@@ -6,19 +6,9 @@ import 'package:machine_task_app/view/widgets/authentication/day_selector_widget
 import 'package:machine_task_app/view/widgets/authentication/farmer_eats_text_widget.dart';
 import 'package:machine_task_app/view/widgets/authentication/time_slots_widget.dart';
 import 'package:machine_task_app/view/widgets/common/common_grey_small_text_widget.dart';
-class BussinessHoursSetPage extends StatefulWidget {
+class BussinessHoursSetPage extends StatelessWidget {
   const BussinessHoursSetPage({super.key});
 
-  @override
-  State<BussinessHoursSetPage> createState() => _BussinessHoursSetPageState();
-}
-
-class _BussinessHoursSetPageState extends State<BussinessHoursSetPage> {
-  @override
-  void dispose() {
-    Get.find<AuthenticationController>().disposeControllers();
-    super.dispose();
-  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(

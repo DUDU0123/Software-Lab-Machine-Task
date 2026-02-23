@@ -87,7 +87,7 @@ class AuthenticationRepo {
     }
   }
 
-  forgotPassword({
+  Future<bool> forgotPassword({
     required String mobileNumber,
   }) async {
     try {
@@ -97,31 +97,43 @@ class AuthenticationRepo {
           "mobile": mobileNumber,
         },
       );
+      if (response.data["success"] == true) {
+        return true;
+      } else {
+        throw Exception(["Something went wrong"]);
+      }
     } catch (e) {
       debugPrint("Exception on Forgot Password: ${e.toString()}");
+      return false;
     }
   }
 
-  verifyOtp({required String otp}) async {
+  Future<bool> verifyOtp({required String otp}) async {
     try {
-      await dio.post(
+      final response = await dio.post(
         "${BackendConstants.baseUrl}${BackendConstants.verifyOtpEndpoint}",
         data: {
           "otp": otp,
         },
       );
+      if (response.data["success"] == true) {
+        return true;
+      } else {
+        throw Exception("Something went wrong");
+      }
     } catch (e) {
       debugPrint("Exception on Verify OTP: ${e.toString()}");
+      throw Exception(e.toString());
     }
   }
 
-  resetPassword({
+  Future<bool> resetPassword({
     required String token,
     required String newPassword,
     required String confirmPassword,
   }) async {
     try {
-      await dio.post(
+      final response = await dio.post(
         "${BackendConstants.baseUrl}${BackendConstants.resetPasswordEndpoint}",
         data: {
           "token": token,
@@ -129,8 +141,14 @@ class AuthenticationRepo {
           "cpassword": confirmPassword,
         },
       );
+      if (response.data["success"] == true) {
+        return true;
+      } else {
+        throw Exception("Something went wrong");
+      }
     } catch (e) {
       debugPrint("Exception on Reset Password: ${e.toString()}");
+      throw Exception(e.toString());
     }
   }
 }

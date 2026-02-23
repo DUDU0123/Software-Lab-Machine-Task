@@ -1,3 +1,4 @@
+import 'package:machine_task_app/controller/authentication_controller.dart';
 import 'package:machine_task_app/core/constants/app_imports.dart';
 import 'package:machine_task_app/view/screens/authentication/login/login_page.dart';
 import 'package:machine_task_app/view/screens/authentication/reset_password/reset_password_page.dart';
@@ -99,7 +100,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                     onPressed: () {
                       final otp = getOtp();
                       if (otp.length == 5 && otp.isNotEmpty) {
-                        Get.to(()=> ResetPasswordPage());
+                        Get.find<AuthenticationController>().verifyOtp(otp: otp);
                       } else {
                         AppCommonMethods.commonSnackbar(title: "Error", message: "Please enter the correct OTP.");
                       }
@@ -107,7 +108,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                   ),
                   Center(
                     child: TextButton(onPressed: () {
-                      // resend code
+                      Get.find<AuthenticationController>().forgotPassword(mobileNumber: Get.find<AuthenticationController>().resetPasswordPhoneNumber);
                     }, child: Text(
                       "Resend Code",
                       style: AppCommonMethods.commonTextStyle(
