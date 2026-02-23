@@ -25,14 +25,12 @@ class AuthenticationRepo {
           "social_id": socialId,
         },
       );
-      debugPrint(response.data.toString());
       if(response.data["success"] == true){
         return true;
       } else {
         throw Exception("Login failed: ${response.data["message"]}");
       }
     } catch (e) {
-      debugPrint("Exception on Login: ${e.toString()}");
       return false;
     }
   }
@@ -76,13 +74,11 @@ class AuthenticationRepo {
       );
       if(response.data["success"] == true){
         response.data["token"];
-        debugPrint("Registration successful: ${response.data.toString()}");
         return true;
       } else {
         throw Exception("Registration failed: ${response.data["message"]}");
       }
     } catch (e) {
-      debugPrint("Exception on Register: ${e.toString()}");
       throw Exception("Something went wrong");
     }
   }
@@ -103,7 +99,6 @@ class AuthenticationRepo {
         throw Exception(["Something went wrong"]);
       }
     } catch (e) {
-      debugPrint("Exception on Forgot Password: ${e.toString()}");
       return false;
     }
   }
